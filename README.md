@@ -1,0 +1,1 @@
+# stance-nakba-2026
