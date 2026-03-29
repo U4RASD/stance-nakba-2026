@@ -38,6 +38,21 @@ python -m stance_detection.training.baseline -st B -m UBC-NLP/MARBERTv2 --cross-
 python -m stance_detection.llm.predict -st B -s val --task stance
 ```
 
+## Clustering
+
+Centroid-based classifier that embeds documents and assigns stances by nearest cluster centroid.
+
+```bash
+# Train from a topic/stance/*.txt folder structure
+python -m stance_detection.clustering.train ./data -o model.pkl -m Qwen/Qwen3-Embedding-8B
+
+# Evaluate on a labelled CSV
+python -m stance_detection.clustering.evaluate dataset.csv model.pkl -o ./eval_results
+
+# Predict a single text
+python -m stance_detection.clustering.predict model.pkl topic_name "text to classify"
+```
+
 ## Evaluation
 
 ```bash
@@ -61,6 +76,14 @@ stance_detection/
         multitask_train.py  Multitask CLI entry point
         cv.py               Stratified K-fold cross-validation
         utils.py            Shared training helpers
+    clustering/
+        classifier.py       Nearest-centroid stance classifier
+        cluster.py          Cluster management and distance metrics
+        embedder.py         HuggingFace embedding wrapper
+        data_loader.py      Folder-based document loader
+        train.py            Training CLI
+        evaluate.py         Evaluation CLI
+        predict.py          Prediction CLI
     llm/
         client.py           OpenAI compatible LLM client
         prompting.py        Prompts and response schemas
